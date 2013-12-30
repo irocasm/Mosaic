@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MOSAIC</title>
+	<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+	<script src="Cells.js"></script>
+</head>
+<body>
+	<canvas id="mosaic"></canvas><br />
+	<input type="file" id="import" />
+	<a href="#" id="importButton">Importiere Datei</a>
+<style type="text/css">
+body {
+	background: lightGray;
+}
+canvas {
+	display: block;
+	/* background: #ff0; */
+}
+#import {
+	display:none;
+}
+#importButton {
+	/*
+	display: inline-block;
+	text-decoration: none;
+	background: linear-gradient(to bottom, #fff, #888 20%, #666);
+	color: #000;
+	border: 1px solid black;
+	border-radius: 3px;
+	padding: 3px 6px;
+	*/
+}
+/*
+#importButton:hover {
+	background: linear-gradient(to bottom, #fff, #999 20%, #777 80%, #555);
+}
+#importButton:active {
+	background: linear-gradient(to bottom, #555, #777 20%, #999 80%, #fff);
+	box-shadow: 1px 3px 5px #555 inset;
+}*/
+</style>
+<script type="text/javascript">
+'use strict';
+var options = {
+	height: 5,
+	width : 5,
+	cellSize: 30,// 30,
+	fontSize: 22,// 22,
+	stateColors: ["transparent", "#000", "#fff"],
+	fontColors:  ["#000",        "#fff", "#000"],
+	gridColor: "#777",
+	correctNrColor: "#777",
+	thumbnailCellSize: 2
+};
+var NN = Cells.NONUMBER;
+var NUMBERS = [
+	[NN, NN,  2, NN, NN],
+	[NN,  0, NN,  3, NN],
+	[NN,  3, NN, NN, NN],
+	[NN, NN,  5, NN,  5],
+	[NN,  3, NN, NN, NN]
+];
+var canvasElement = document.getElementById('mosaic')
+Cells.init(options, NUMBERS, canvasElement, geCB);
+
+var inputElement = document.getElementById("import");
+inputElement.addEventListener("change", handleFile);
+canvasElement.addEventListener("dragenter", drag);
+canvasElement.addEventListener("dragover", drag);
+canvasElement.addEventListener("drop", drop);
+window.addEventListener("load", getProgress);
+window.addEventListener("unload", saveProgress);
+
+var fileSelect = document.getElementById("importButton");
+fileSelect.addEventListener("click", function (e) {
+	e.preventDefault(); // prevent navigation to "#"
+	if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
+		inputElement.click();
+	}
+});
+
+function handleFile(evt, file) {
+	if (!(file instanceof File)) {
+		file = evt.target.files[0];
+	}
+	var reader = new FileReader();
+    reader.addEventListener("load", function (evt) {
+		var text = evt.target.result.split("\n");
+		var width  = parseInt(text.shift(), 10);
+		var height = parseInt(text.shift(), 10);
+		var cells = new Array(height);
+		for (var y=0; y<height; y++) {
+			for (var x=0; x<width; x++) {
+				if (x === 0) {
+					cells[y] = new Array(width);
+				}
+				cells[y][x] = text[y][x] === "." ? Cells.NONUMBER : parseInt(text[y][x], 10);
+			}
+		}
+		Cells.importGame(width, height, cells);
+		if (document.getElementById("thumbnail")) {
+			document.getElementById("thumbnail").remove();
+		}
+	});
+    reader.readAsText(file);
+}
+function drop(evt) {
+  evt.stopPropagation();
+  evt.preventDefault();
+  if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
+		handleFile(undefined, evt.dataTransfer.files[0]);
+	}
+  
+}
+function drag(evt) {
+  evt.stopPropagation();
+  evt.preventDefault();
+}
+function saveProgress() {
+	if (Cells.GameEnded) {
+		return;
+	}
+	localStorage.setItem("sessionSave", JSON.stringify(Cells.exportProgress()));
+}
+function getProgress() {
+	var pro = JSON.parse(localStorage.getItem("sessionSave"));
+	if (pro !== null) {
+		Cells.importProgress(pro.width, pro.height, pro.cells, pro.states);
+		localStorage.removeItem("sessionSave");
+	}
+}
+function geCB(c) {
+	document.getElementsByTagName("body")[0].insertBefore(c, inputElement);
+	alert("Gewonnen");
+}
+</script>
+</body>
+</html>
