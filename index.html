@@ -84,6 +84,10 @@ function handleFile(evt, file) {
 	if (!(file instanceof File)) {
 		file = evt.target.files[0];
 	}
+	if (file.type !== "text/plain") {
+		//DError("Must be Textfile!");
+		return;
+	}
 	var reader = new FileReader();
     reader.addEventListener("load", function (evt) {
 		var text = evt.target.result.split("\n");
