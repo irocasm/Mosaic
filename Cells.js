@@ -13,6 +13,7 @@ Cells.init = function (options, cells, canvasEl, GameEndCB) {
 	Cells.top = canvasEl.getBoundingClientRect().top;
 	Cells.height = options.height;
 	Cells.width = options.width;
+	Cells.name = "Mosaic";
 	Cells.cellSize = options.cellSize;
 	Cells.fontSize = options.fontSize;
 	Cells.stateColors = options.stateColors;
@@ -219,11 +220,12 @@ Cells.thumbnail = function () {
 	return canvas;
 };
 
-Cells.importGame = function (width, height, cells) {
+Cells.importGame = function (width, height, cells, name) {
 	if (!(Cells.utils.isInt(width) && width > 0 &&
 		Cells.utils.isInt(height) && height > 0)) {
 		throw new TypeError();
 	}
+	Cells.name = name || "Mosaic";
 	Cells.width = width;
 	Cells.height = height;
 	Cells.left = Cells.canvas.getBoundingClientRect().left;
@@ -247,8 +249,8 @@ Cells.importGame = function (width, height, cells) {
 	Cells.GameStarted = false;
 	Cells.GameEnded = false;
 };
-Cells.importProgress = function (width, height, cells, states) {
-	Cells.importGame(width, height, cells);
+Cells.importProgress = function (width, height, cells, states, name) {
+	Cells.importGame(width, height, cells, name);
 	Cells.GameStarted = true;
 	for (var x=0;x<width;x++) {
 		for (var y=0;y<height;y++) {
@@ -266,6 +268,7 @@ Cells.exportProgress = function () {
 	var exp = Object.create(null);
 	exp.width  = Cells.width;
 	exp.height = Cells.height;
+	exp.name = Cells.name;
 	exp.cells  = new Array(Cells.height);
 	exp.states = new Array(Cells.height);
 	var nr = 0;

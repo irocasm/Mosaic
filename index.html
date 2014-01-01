@@ -6,6 +6,7 @@
 	<script src="Cells.js"></script>
 </head>
 <body>
+	<h1>Mosaic</h1>
 	<canvas id="mosaic"></canvas><br />
 	<input type="file" id="import" />
 	<a href="#" id="importButton">Importiere Datei</a>
@@ -102,10 +103,11 @@ function handleFile(evt, file) {
 				cells[y][x] = text[y][x] === "." ? Cells.NONUMBER : parseInt(text[y][x], 10);
 			}
 		}
-		Cells.importGame(width, height, cells);
+		Cells.importGame(width, height, cells, file.name);
 		if (document.getElementById("thumbnail")) {
 			document.getElementById("thumbnail").remove();
 		}
+		document.getElementsByTagName("h1")[0].textContent = file.name;
 	});
     reader.readAsText(file);
 }
@@ -130,8 +132,9 @@ function saveProgress() {
 function getProgress() {
 	var pro = JSON.parse(localStorage.getItem("sessionSave"));
 	if (pro !== null) {
-		Cells.importProgress(pro.width, pro.height, pro.cells, pro.states);
+		Cells.importProgress(pro.width, pro.height, pro.cells, pro.states, pro.name);
 		localStorage.removeItem("sessionSave");
+		document.getElementsByTagName("h1")[0].textContent = Cells.name;
 	}
 }
 function geCB(c) {
