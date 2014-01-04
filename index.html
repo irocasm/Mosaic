@@ -3,6 +3,7 @@
 <head>
 	<title>MOSAIC</title>
 	<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8" />
+	<script src="options.js"></script>
 	<script src="Cells.js"></script>
 </head>
 <body>
@@ -43,17 +44,7 @@ canvas {
 </style>
 <script type="text/javascript">
 'use strict';
-var options = {
-	height: 5,
-	width : 5,
-	cellSize: 30,// 30,
-	fontSize: 22,// 22,
-	stateColors: ["transparent", "#000", "#fff"],
-	fontColors:  ["#000",        "#fff", "#000"],
-	gridColor: "#777",
-	correctNrColor: "#777",
-	thumbnailCellSize: 2
-};
+options.height = options.width = 5;
 var NN = Cells.NONUMBER;
 var NUMBERS = [
 	[NN, NN,  2, NN, NN],
