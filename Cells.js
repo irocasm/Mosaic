@@ -1,7 +1,7 @@
 Cells = Object.create(null);
 Cells.time = 0;
 Cells.times = 0;
-Cells.NONUMBER = 0x80; //-1
+Cells.NONUMBER = 0x80; //-128
 Cells.init = function (options, cells, canvasEl, GameEndCB) {
 	if (!canvasEl instanceof HTMLCanvasElement) {
 		throw new TypeError();
