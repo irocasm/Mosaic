@@ -58,9 +58,9 @@ Cells.init(options, NUMBERS, canvasElement, geCB);
 
 var inputElement = document.getElementById("import");
 inputElement.addEventListener("change", handleFile);
-canvasElement.addEventListener("dragenter", drag);
-canvasElement.addEventListener("dragover", drag);
-canvasElement.addEventListener("drop", drop);
+window.addEventListener("dragenter", drag);
+window.addEventListener("dragover", drag);
+window.addEventListener("drop", drop);
 window.addEventListener("load", getProgress);
 window.addEventListener("unload", saveProgress);
 
