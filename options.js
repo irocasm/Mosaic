@@ -4,6 +4,6 @@ var options = {
 	stateColors: ["transparent", "#000", "#fff"],
 	fontColors:  ["#000",        "#fff", "#000"],
 	gridColor: "#777",
-	correctNrColor: "#777",
-	thumbnailCellSize: 2
+	correctNrColor: "rgba(128,128,128,.5)",
+	thumbnailCellSize: 1
 };
