@@ -194,6 +194,9 @@ Cells.endGame = function (cb) {
 };
 Cells.click = function (evt) {
     "use strict";
+    if (evt.button === 1) {
+        return;
+    }
     Cells.GameStarted = true;
     Cells.canvas.addEventListener("mousemove", Cells.mousemove);
     var x = ((evt.clientX - Cells.left) / Cells.cellSize) | 0,
