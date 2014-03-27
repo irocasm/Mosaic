@@ -11,6 +11,7 @@
 	<canvas id="mosaic"></canvas><br />
 	<input type="file" id="import" />
 	<a href="#" id="importButton">Importiere Datei</a>
+    <a href="#" id="resetButton">Zurücksetzen</a>
 <style type="text/css">
 body {
 	background: lightGray;
@@ -69,6 +70,15 @@ fileSelect.addEventListener("click", function (e) {
 	e.preventDefault(); // prevent navigation to "#"
 	if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
 		inputElement.click();
+	}
+});
+document.getElementById("resetButton").addEventListener("click", function (e) {
+	e.preventDefault(); // prevent navigation to "#"
+	if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
+		Cells.reset();
+		if (document.getElementById("thumbnail")) {
+			document.getElementById("thumbnail").remove();
+		}
 	}
 });
 

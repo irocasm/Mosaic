@@ -249,6 +249,26 @@ Cells.thumbnail = function () {
     return canvas;
 };
 
+Cells.reset = function () {
+    "use strict";
+    var i, j;
+    for (i = 0; i < Cells.width; i++) {
+        for (j = 0; j < Cells.height; j++) {
+            Cells.setState(i, j, 0);
+        }
+    }
+    Cells.lastState = 0;
+    Cells.canvas.height = Cells.height * Cells.cellSize;
+    Cells.ctx.font = Cells.fontSize + 'px "Lucida Console", "Courier New", monospace';
+    Cells.drawBoard(false);
+    Cells.drawBoard(true);
+    if (Cells.GameEnded) {
+        Cells.canvas.addEventListener("mousedown", Cells.click);
+        document.addEventListener("mouseup", Cells.mouseup);
+    }
+    Cells.GameStarted = false;
+    Cells.GameEnded = false;
+}
 Cells.importGame = function (width, height, cells, name) {
     "use strict";
     if (!(Cells.utils.isInt(width) && width > 0 &&
