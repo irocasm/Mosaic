@@ -11,7 +11,7 @@
 	<canvas id="mosaic"></canvas><br />
 	<input type="file" id="import" />
 	<a href="#" id="importButton">Importiere Datei</a>
-    <a href="#" id="resetButton">Zurücksetzen</a>
+	<a href="#" id="resetButton">Zurücksetzen</a>
 <style type="text/css">
 body {
 	background: lightGray;
@@ -113,16 +113,15 @@ function handleFile(evt, file) {
     reader.readAsText(file);
 }
 function drop(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-  if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
+	evt.stopPropagation();
+	evt.preventDefault();
+	if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
 		handleFile(undefined, evt.dataTransfer.files[0]);
 	}
-  
 }
 function drag(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
+	evt.stopPropagation();
+	evt.preventDefault();
 }
 function saveProgress() {
 	if (Cells.GameEnded) {
