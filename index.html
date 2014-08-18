@@ -134,7 +134,7 @@ function getProgress() {
 	var pro = JSON.parse(localStorage.getItem("sessionSave"));
 	if (pro !== null) {
 		Cells.importProgress(pro.width, pro.height, pro.cells, pro.states, pro.name);
-		localStorage.removeItem("sessionSave");
+		//localStorage.removeItem("sessionSave");
 		document.getElementsByTagName("h1")[0].textContent = Cells.name;
 	}
 }
