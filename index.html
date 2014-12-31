@@ -28,6 +28,7 @@
 	<input type="file" id="import" />
 	<a href="#" id="importButton">Importiere Datei</a>
 	<a href="#" id="resetButton">Zurücksetzen</a>
+    <span id="timer">0:00</span>
 <style type="text/css">
 body {
 	background: lightGray;
@@ -81,6 +82,9 @@ window.addEventListener("drop", drop);
 window.addEventListener("load", getProgress);
 window.addEventListener("unload", saveProgress);
 
+var timer_lasttime = Date.now();
+var timer_duration = 0;
+
 var fileSelect = document.getElementById("importButton");
 fileSelect.addEventListener("click", function (e) {
 	e.preventDefault(); // prevent navigation to "#"
@@ -92,11 +96,14 @@ document.getElementById("resetButton").addEventListener("click", function (e) {
 	e.preventDefault(); // prevent navigation to "#"
 	if (!Cells.GameStarted || Cells.GameEnded || confirm("Ihr derzeitiger Fortschritt geht verloren.\nFortfahren?")) {
 		Cells.reset();
+        timer_lasttime = Date.now();
+        timer_duration = 0;
 		if (document.getElementById("thumbnail")) {
 			document.getElementById("thumbnail").remove();
 		}
 	}
 });
+var timer_updater = window.setInterval(updateTimeDisplay.bind(document.getElementById("timer")), 333);
 
 function handleFile(evt, file) {
 	if (!(file instanceof File)) {
@@ -125,6 +132,8 @@ function handleFile(evt, file) {
 			document.getElementById("thumbnail").remove();
 		}
 		document.getElementsByTagName("h1")[0].textContent = file.name;
+        timer_lasttime = Date.now();
+        timer_duration = 0;
 	});
     reader.readAsText(file);
 }
@@ -143,6 +152,8 @@ function saveProgress() {
 	if (Cells.GameEnded) {
 		return;
 	}
+    timer_duration += Date.now() - timer_lasttime;
+	localStorage.setItem("sessionTime", timer_duration.toString(36));
 	localStorage.setItem("sessionSave", JSON.stringify(Cells.exportProgress()));
 }
 function getProgress() {
@@ -152,10 +163,28 @@ function getProgress() {
 		//localStorage.removeItem("sessionSave");
 		document.getElementsByTagName("h1")[0].textContent = Cells.name;
 	}
+    var timer = localStorage.getItem("sessionTime");
+    if (timer !== null) {
+        timer_duration = parseInt(timer, 36);
+    }
+}
+function updateTimeDisplay() {
+    var timeFormatted = "", timeDiffInSeconds;
+    timer_duration += Date.now() - timer_lasttime;
+    timer_lasttime = Date.now();
+    timeDiffInSeconds = (timer_duration / 1000) | 0;
+    timeFormatted += (timeDiffInSeconds / 60) | 0;
+    timeFormatted += ":" + formatSeconds(timeDiffInSeconds % 60);
+    this.innerHTML = timeFormatted;
+}
+function formatSeconds(s) {
+    return s < 10 ? "0" + s : "" + s;
 }
 function geCB(c) {
 	document.getElementsByTagName("body")[0].insertBefore(c, inputElement);
+    window.clearInterval(timer_updater);
 	alert("Gewonnen");
+    
 }
 </script>
 </body>
