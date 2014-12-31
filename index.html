@@ -183,7 +183,7 @@ function formatSeconds(s) {
 function geCB(c) {
 	document.getElementsByTagName("body")[0].insertBefore(c, inputElement);
     window.clearInterval(timer_updater);
-	alert("Gewonnen");
+	alert("Gewonnen in " + document.getElementById("timer").innerHTML);
     
 }
 </script>
