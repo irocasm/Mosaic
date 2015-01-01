@@ -169,12 +169,13 @@ function getProgress() {
     }
 }
 function updateTimeDisplay() {
-    var timeFormatted = "", timeDiffInSeconds;
-    timer_duration += Date.now() - timer_lasttime;
+    var timeFormatted = "", diff = Date.now() - timer_lasttime, timeDurationInSeconds;
+    if (diff > 300000) return; // something weird happend; sleep? hibernate?
+    timer_duration += diff;
     timer_lasttime = Date.now();
-    timeDiffInSeconds = (timer_duration / 1000) | 0;
-    timeFormatted += (timeDiffInSeconds / 60) | 0;
-    timeFormatted += ":" + formatSeconds(timeDiffInSeconds % 60);
+    timeDurationInSeconds = (timer_duration / 1000) | 0;
+    timeFormatted += (timeDurationInSeconds / 60) | 0;
+    timeFormatted += ":" + formatSeconds(timeDurationInSeconds % 60);
     this.innerHTML = timeFormatted;
 }
 function formatSeconds(s) {
