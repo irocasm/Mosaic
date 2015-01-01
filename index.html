@@ -98,6 +98,8 @@ document.getElementById("resetButton").addEventListener("click", function (e) {
 		Cells.reset();
         timer_lasttime = Date.now();
         timer_duration = 0;
+        window.clearInterval(timer_updater);
+        timer_updater = window.setInterval(updateTimeDisplay.bind(document.getElementById("timer")), 333);
 		if (document.getElementById("thumbnail")) {
 			document.getElementById("thumbnail").remove();
 		}
@@ -134,6 +136,8 @@ function handleFile(evt, file) {
 		document.getElementsByTagName("h1")[0].textContent = file.name;
         timer_lasttime = Date.now();
         timer_duration = 0;
+        window.clearInterval(timer_updater);
+        timer_updater = window.setInterval(updateTimeDisplay.bind(document.getElementById("timer")), 333);
 	});
     reader.readAsText(file);
 }
